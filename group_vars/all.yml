@@ -1,0 +1,4 @@
+user: vagrant
+docker_dir: /etc/docker
+docker_insecure_registries: ["docker-reg.textkernel.local:5000"]
+docker_mirrors: ["http://docker-reg.textkernel.local:5001"]

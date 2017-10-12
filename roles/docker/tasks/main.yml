@@ -1,0 +1,29 @@
+---
+- name: Install Docker
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: docker
+    state: latest
+
+- name: Copy config file
+  template: src="daemon.json.j2" dest={{ docker_dir }}/daemon.json
+  register: docker_daemon_config
+
+- name: Setup proper docker.sock perms
+  file:
+    path: /var/run/docker.sock
+    group: docker
+    mode: 0660
+
+- name: Add docker group
+  group:
+    name: docker
+    state: present
+
+- name: Adding existing user '{{ user }}' to group docker
+  user: name='{{ user }}'
+        groups=docker
+        append=yes
+
+- name: Enable Docker
+  service: name=docker enabled=no state=started

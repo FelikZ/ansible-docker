@@ -1,0 +1,9 @@
+---
+# some description for deployments setup
+
+# Install docker
+- hosts: dockers
+  roles:
+    - docker
+  tags:
+    - docker
