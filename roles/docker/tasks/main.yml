@@ -5,20 +5,19 @@
     name: docker
     state: latest
 
-- name: Copy config file
-  template: src="daemon.json.j2" dest={{ docker_dir }}/daemon.json
-  register: docker_daemon_config
-
-- name: Setup proper docker.sock perms
-  file:
-    path: /var/run/docker.sock
-    group: docker
-    mode: 0660
-
 - name: Add docker group
   group:
     name: docker
     state: present
+
+- name: Copy config file
+  vars:
+    config: "{{ docker_daemon | mandatory }}"
+  template:
+    src: "daemon.json.j2"
+    dest: "{{ docker_dir }}/daemon.json"
+    group: docker
+    mode: 0660
 
 - name: Adding existing user '{{ user }}' to group docker
   user: name='{{ user }}'
@@ -27,3 +26,9 @@
 
 - name: Enable Docker
   service: name=docker enabled=no state=started
+
+- name: Setup proper docker.sock perms
+  file:
+    path: /var/run/docker.sock
+    group: docker
+    mode: 0660
