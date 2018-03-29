@@ -1,5 +1,6 @@
 user: vagrant
 docker_dir: /etc/docker
 docker_daemon:
+  storage-driver: devicemapper
   insecure-registries: []
   registry-mirrors: []
